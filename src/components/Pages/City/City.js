@@ -6,18 +6,21 @@ import React, {
   useCallback,
 } from 'react';
 import { Dropdown, Card, Button } from 'react-bootstrap';
-import CityApis from '@Api/CityApis';
-import ImgReducer from './Reducer/ImgReducer';
-import LoadReducer from './Reducer/LoadReducer';
+import CityApi from '@Api/CityApi';
+import CityImgReducer from '@Reducer/City/CityImgReducer';
+import CityLoadReducer from '@Reducer/City/CityLoadReducer';
+import useFetchCityApi from '@Hooks/useFetchCityApi';
 
 function City() {
-  const [imgState, imgDispatch] = useReducer(ImgReducer, {
+  const [imgState, imgDispatch] = useReducer(CityImgReducer, {
     images: [],
-    fetching: true,
+    fetching: false,
   });
-  const [loadState, loadDispatch] = useReducer(LoadReducer, { load: 0 });
+  const [loadState, loadDispatch] = useReducer(CityLoadReducer, { load: 0 });
+  const [initState, setInitState] = useState(true);
+  const [selectCountry, setSelectCountry] = useState([]);
 
-  console.log('loadState', loadState);
+  const [disableList, setDisableList] = useState([]);
 
   useEffect(() => {
     if (loadState.load === 30 || loadState.load === 0) {
@@ -40,27 +43,44 @@ function City() {
     },
     [loadDispatch]
   );
-
+  useFetchCityApi(initState, loadState, imgDispatch, selectCountry);
   useEffect(() => {
-    if (bottomBoundaryRef.current && imgState.images) {
-      a(bottomBoundaryRef.current);
-    }
-  }, [a, bottomBoundaryRef]);
-
-  /* function */
-
-  const handleOnClick = async () => {
-    imgDispatch({ type: 'FETCH_DATA', fetching: true });
-    let data = await CityApis(loadState.load === 0 ? 30 : loadState.load);
-    console.log('data', data);
-    if (data === 'error') {
-      imgDispatch({ type: 'FETCH_DATA', fetching: false });
+    if (initState) {
       return;
     }
-    imgDispatch({ type: 'STACK_IMAGE', data });
-  };
+
+    a(bottomBoundaryRef.current);
+  }, [a, bottomBoundaryRef.current]);
+
   console.log('imgState', imgState);
-  console.log('loadState', loadState);
+  let countrylist = {
+    臺北市: 'Taipei',
+    新北市: 'NewTaipei',
+    桃園市: 'Taoyuan',
+    臺中市: 'Taichung',
+  };
+  /* function */
+
+  const handleOnClick = (e) => {
+    console.log('e', e);
+    if (!e) {
+      return;
+    }
+
+    imgDispatch({ type: 'CLEAR_DATA' });
+    loadDispatch({ type: 'CLEAR_REQUEST' });
+    if (countrylist[e.target.innerText]) {
+      setSelectCountry(countrylist[e.target.innerText]);
+    } else return;
+
+    setInitState(false);
+
+    // // if (disableList.includes(e.target.innerText)) {
+    // //   return;
+    // // } else {
+    // //   setDisableList([...disableList, e.target.innerText]);
+    // // }
+  };
 
   /* Main */
 
@@ -72,16 +92,19 @@ function City() {
           Dropdown Button
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => handleOnClick()}>台北市</Dropdown.Item>
-          <Dropdown.Item>新北市</Dropdown.Item>
-          <Dropdown.Item>桃園市</Dropdown.Item>
+          {Object.keys(countrylist).map((e, id) => (
+            <Dropdown.Item key={id} onClick={(e) => handleOnClick(e)}>
+              {e}
+            </Dropdown.Item>
+          ))}
         </Dropdown.Menu>
       </Dropdown>
-      {imgState.images
-        ? imgState.images.map((data) => (
+      {imgState
+        ? imgState.images.map((data, id) => (
             <Card
               style={{ width: '18rem' }}
-              key={data.ID}
+              // key={data.ID}
+              key={id}
               style={{
                 width: '300px',
                 maxHeight: '500px',

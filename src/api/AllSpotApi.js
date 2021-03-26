@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-function CityApis(skipNum) {
-  let skip = skipNum ? `&$skip=${skipNum}` : null;
+function CityApi(skipNum) {
+  let skip = skipNum ? `&$skip=${skipNum}` : '';
 
   return axios
     .get(
@@ -11,4 +11,4 @@ function CityApis(skipNum) {
     .catch((error) => 'error');
 }
 
-export default CityApis;
+export default CityApi;
