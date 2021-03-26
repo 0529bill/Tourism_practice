@@ -22,12 +22,31 @@ function City() {
 
   const [disableList, setDisableList] = useState([]);
 
-  useEffect(() => {
-    if (loadState.load === 30 || loadState.load === 0) {
-      return;
-    }
-    handleOnClick();
-  }, [loadState.load]);
+  /* data */
+  let countrylist = {
+    臺北市: 'Taipei',
+    新北市: 'NewTaipei',
+    桃園市: 'Taoyuan',
+    臺中市: 'Taichung',
+    臺南市: 'Tainan',
+    高雄市: 'Kaohsiung',
+    基隆市: 'Keelung',
+    新竹市: 'Hsinchu',
+    新竹縣: 'HsinchuCounty',
+    苗栗縣: 'MiaoliCounty',
+    彰化縣: 'ChanghuaCounty',
+    南投縣: 'NantouCounty',
+    雲林縣: 'YunlinCounty',
+    嘉義縣: 'ChiayiCounty',
+    嘉義市: 'Chiayi',
+    屏東縣: 'PingtungCounty',
+    宜蘭縣: 'YilanCounty',
+    花蓮縣: 'HualienCounty',
+    臺東縣: 'TaitungCounty',
+    金門縣: 'KinmenCounty',
+    澎湖縣: 'PenghuCounty',
+    連江縣: 'LienchiangCounty',
+  };
 
   let bottomBoundaryRef = useRef(null);
   let a = useCallback(
@@ -53,12 +72,7 @@ function City() {
   }, [a, bottomBoundaryRef.current]);
 
   console.log('imgState', imgState);
-  let countrylist = {
-    臺北市: 'Taipei',
-    新北市: 'NewTaipei',
-    桃園市: 'Taoyuan',
-    臺中市: 'Taichung',
-  };
+
   /* function */
 
   const handleOnClick = (e) => {
@@ -74,12 +88,6 @@ function City() {
     } else return;
 
     setInitState(false);
-
-    // // if (disableList.includes(e.target.innerText)) {
-    // //   return;
-    // // } else {
-    // //   setDisableList([...disableList, e.target.innerText]);
-    // // }
   };
 
   /* Main */
@@ -126,7 +134,7 @@ function City() {
         : null}
       <div
         id="page-bottom-boundary"
-        style={{ border: '1px solid red' }}
+        style={{ border: '1px solid red', marginTop: '50px' }}
         ref={bottomBoundaryRef}
       ></div>
     </>
