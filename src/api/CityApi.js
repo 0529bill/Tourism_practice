@@ -8,7 +8,7 @@ function AllSpotApi(skipNum, selectCountry) {
       `https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot/${selectCountry}?$top=30${skip}&$format=JSON`
     )
     .then((response) => response.data)
-    .catch((error) => 'error');
+    .catch(() => 'error');
 }
 
 export default AllSpotApi;

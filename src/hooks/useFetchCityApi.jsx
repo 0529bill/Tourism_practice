@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import CityApi from '@Api/CityApi';
 
@@ -21,9 +21,10 @@ export default function useFetchCityApi(
     if (initState) {
       return;
     }
+
     async function fetchData() {
-      console.log('triggeredUseFetch');
       imgDispatch({ type: 'FETCH_DATA', fetching: true });
+
       let data = await CityApi(
         loadState.load === 0 ? 0 : loadState.load - 30,
         selectCountry
@@ -33,8 +34,8 @@ export default function useFetchCityApi(
         imgDispatch({ type: 'FETCH_DATA', fetching: true });
         return;
       }
+
       imgDispatch({ type: 'STACK_IMAGE', data });
-      console.log('images is send');
     }
     fetchData();
   }, [loadState.load]);

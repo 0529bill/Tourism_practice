@@ -6,12 +6,12 @@ import React, {
   useCallback,
 } from 'react';
 import { Dropdown, Card, Button } from 'react-bootstrap';
-import CityApi from '@Api/CityApi';
 import CityImgReducer from '@Reducer/City/CityImgReducer';
 import CityLoadReducer from '@Reducer/City/CityLoadReducer';
 import useFetchCityApi from '@Hooks/useFetchCityApi';
 
 function City() {
+  /* Global & Local State */
   const [imgState, imgDispatch] = useReducer(CityImgReducer, {
     images: [],
     fetching: false,
@@ -19,8 +19,6 @@ function City() {
   const [loadState, loadDispatch] = useReducer(CityLoadReducer, { load: 0 });
   const [initState, setInitState] = useState(true);
   const [selectCountry, setSelectCountry] = useState([]);
-
-  const [disableList, setDisableList] = useState([]);
 
   /* data */
   let countrylist = {
@@ -54,35 +52,37 @@ function City() {
       return new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           console.log('entry', entry);
-          if (entry.intersectionRatio > 0.1) {
-            return loadDispatch({ type: 'LOAD_REQUEST' });
+          // if (entry.intersectionRatio > 0.1) {
+          //   return loadDispatch({ type: 'LOAD_REQUEST' });
+          //   // return setInitState(true);
+          // }
+          if (entry && entry.isIntersecting) {
+            loadDispatch({ type: 'LOAD_REQUEST' });
           }
         });
       }).observe(node);
     },
     [loadDispatch]
   );
-  console.log('loadState', loadState);
+
+  /* Hooks */
+
   useFetchCityApi(initState, loadState, imgDispatch, selectCountry);
-  console.log('bottomBoundary', bottomBoundaryRef);
+
   useEffect(() => {
-    if (initState) {
+    if (initState && bottomBoundaryRef.current) {
       return;
     }
 
     a(bottomBoundaryRef.current);
-  }, [a, bottomBoundaryRef.current]);
-
-  console.log('imgState', imgState);
+  }, [bottomBoundaryRef.current]);
 
   /* function */
 
   const handleOnClick = (e) => {
-    console.log('e', e);
     if (!e) {
       return;
     }
-
     imgDispatch({ type: 'CLEAR_DATA' });
     loadDispatch({ type: 'CLEAR_REQUEST' });
     if (countrylist[e.target.innerText]) {
