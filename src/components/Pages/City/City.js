@@ -5,10 +5,11 @@ import React, {
   useRef,
   useCallback,
 } from 'react';
-import { Dropdown, Card, Button } from 'react-bootstrap';
+import { Dropdown, Card, Container, Row, Col } from 'react-bootstrap';
 import CityImgReducer from '@Reducer/City/CityImgReducer';
 import CityLoadReducer from '@Reducer/City/CityLoadReducer';
-import useFetchCityApi from '@Hooks/useFetchCityApi';
+import CityApi from '@Api/CityApi';
+import useFetchData from '@Hooks/useFetchData';
 
 function City() {
   /* Global & Local State */
@@ -52,12 +53,8 @@ function City() {
       return new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           console.log('entry', entry);
-          // if (entry.intersectionRatio > 0.1) {
-          //   return loadDispatch({ type: 'LOAD_REQUEST' });
-          //   // return setInitState(true);
-          // }
-          if (entry && entry.isIntersecting) {
-            loadDispatch({ type: 'LOAD_REQUEST' });
+          if (entry.intersectionRatio > 0.1) {
+            return loadDispatch({ type: 'LOAD_REQUEST' });
           }
         });
       }).observe(node);
@@ -67,8 +64,7 @@ function City() {
 
   /* Hooks */
 
-  useFetchCityApi(initState, loadState, imgDispatch, selectCountry);
-
+  useFetchData(CityApi, loadState, imgDispatch, 'city', selectCountry);
   useEffect(() => {
     if (initState && bottomBoundaryRef.current) {
       return;
@@ -80,14 +76,11 @@ function City() {
   /* function */
 
   const handleOnClick = (e) => {
-    if (!e) {
-      return;
-    }
     imgDispatch({ type: 'CLEAR_DATA' });
     loadDispatch({ type: 'CLEAR_REQUEST' });
     if (countrylist[e.target.innerText]) {
       setSelectCountry(countrylist[e.target.innerText]);
-    } else return;
+    } else return 'Please select a country';
 
     setInitState(false);
   };
@@ -111,32 +104,35 @@ function City() {
       </Dropdown>
       {imgState
         ? imgState.images.map((data, id) => (
-            <Card
-              style={{ width: '18rem' }}
-              // key={data.ID}
-              key={id}
-              style={{
-                width: '300px',
-                maxHeight: '500px',
-              }}
-            >
-              <Card.Img
-                variant="top"
-                src={data.Picture ? data.Picture.PictureUrl1 : 'no picture rn'}
-              />
-              <Card.Body>
-                <Card.Title>{data.Name}</Card.Title>
-                <Card.Text>
-                  {data.Description ? data.Description : data.DescriptionDetail}
-                </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
-              </Card.Body>
-            </Card>
+            <Container>
+              <Row key={id}>
+                <Col md={{ span: 6, offset: 3 }} key={id}>
+                  <Card style={{ width: '18rem' }}>
+                    <Card.Img
+                      variant="top"
+                      src={
+                        data.Picture
+                          ? data.Picture.PictureUrl1
+                          : 'no picture rn'
+                      }
+                    />
+                    <Card.Body>
+                      <Card.Title>{data.Name}</Card.Title>
+                      <Card.Text>
+                        {data.Description
+                          ? data.Description
+                          : data.DescriptionDetail}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
+            </Container>
           ))
         : null}
       <div
         id="page-bottom-boundary"
-        style={{ border: '1px solid red', marginTop: '50px' }}
+        style={{ border: '1px solid gray', marginTop: '50px' }}
         ref={bottomBoundaryRef}
       ></div>
     </>

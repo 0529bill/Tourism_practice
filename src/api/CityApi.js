@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-function AllSpotApi(skipNum, selectCountry) {
+function CityApi(skipNum, selectCountry) {
+  console.log('skipNum', skipNum);
   let skip = skipNum ? `&$skip=${skipNum}` : '';
 
   return axios
@@ -11,4 +12,4 @@ function AllSpotApi(skipNum, selectCountry) {
     .catch(() => 'error');
 }
 
-export default AllSpotApi;
+export default CityApi;

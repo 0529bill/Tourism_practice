@@ -1,41 +1,35 @@
-import { useEffect, useState } from 'react';
-
-import CityApi from '@Api/CityApi';
+import { useEffect } from 'react';
 
 export default function useFetchCityApi(
-  initState,
+  Apis,
   loadState,
   imgDispatch,
+  status,
   selectCountry
 ) {
-  //   if (!clickEvent) {
-  //     return;
-  //   }
-  // if (disableList.includes(e.target.innerText)) {
-  //   return;
-  // } else {
-  //   setDisableList([...disableList, e.target.innerText]);
-  // }
-
   useEffect(() => {
-    if (initState) {
-      return;
+    if (status === 'city') {
+      if (selectCountry.length === 0) {
+        return;
+      }
     }
 
     async function fetchData() {
       imgDispatch({ type: 'FETCH_DATA', fetching: true });
 
-      let data = await CityApi(
+      let data = await Apis(
         loadState.load === 0 ? 0 : loadState.load - 30,
         selectCountry
       );
 
       if (data === 'error') {
-        imgDispatch({ type: 'FETCH_DATA', fetching: true });
+        console.log('error fetching data');
         return;
       }
 
       imgDispatch({ type: 'STACK_IMAGE', data });
+
+      imgDispatch({ type: 'FETCH_DATA', fetching: false });
     }
     fetchData();
   }, [loadState.load]);
