@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { memo } from 'react';
 
 function CityApi(skipNum) {
   let skip = skipNum ? `&$skip=${skipNum}` : '';
@@ -11,4 +12,4 @@ function CityApi(skipNum) {
     .catch((error) => 'error');
 }
 
-export default CityApi;
+export default memo(CityApi);
