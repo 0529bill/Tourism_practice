@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { memo } from 'react';
 
-function CityApi(skipNum) {
+function AllSpotApi(skipNum) {
   let skip = skipNum ? `&$skip=${skipNum}` : '';
 
   return axios
@@ -12,4 +11,4 @@ function CityApi(skipNum) {
     .catch((error) => 'error');
 }
 
-export default memo(CityApi);
+export default AllSpotApi;

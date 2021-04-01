@@ -5,10 +5,11 @@ import React, {
   useRef,
   useCallback,
 } from 'react';
-import { Dropdown, Card, Container, Row, Col } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import CityImgReducer from '@Reducer/City/CityImgReducer';
 import CityLoadReducer from '@Reducer/City/CityLoadReducer';
 import CityApi from '@Api/CityApi';
+import Card from '@Common/Widgets/Card';
 import useFetchData from '@Hooks/useFetchData';
 
 function City() {
@@ -63,7 +64,7 @@ function City() {
   );
 
   /* Hooks */
-
+  console.log('CityApi', CityApi);
   useFetchData(CityApi, loadState, imgDispatch, 'city', selectCountry);
   useEffect(() => {
     if (initState && bottomBoundaryRef.current) {
@@ -103,32 +104,7 @@ function City() {
         </Dropdown.Menu>
       </Dropdown>
       {imgState
-        ? imgState.images.map((data, id) => (
-            <Container>
-              <Row key={id}>
-                <Col md={{ span: 6, offset: 3 }} key={id}>
-                  <Card style={{ width: '18rem' }}>
-                    <Card.Img
-                      variant="top"
-                      src={
-                        data.Picture
-                          ? data.Picture.PictureUrl1
-                          : 'no picture rn'
-                      }
-                    />
-                    <Card.Body>
-                      <Card.Title>{data.Name}</Card.Title>
-                      <Card.Text>
-                        {data.Description
-                          ? data.Description
-                          : data.DescriptionDetail}
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>
-            </Container>
-          ))
+        ? imgState.images.map((data, id) => <Card data={data} id={id} />)
         : null}
       <div
         id="page-bottom-boundary"

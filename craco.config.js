@@ -7,6 +7,7 @@ module.exports = {
       '@Components': path.resolve(__dirname, 'src/components/'),
       '@Hooks': path.resolve(__dirname, 'src/hooks/'),
       '@Reducer': path.resolve(__dirname, 'src/reducer/'),
+      '@Common': path.resolve(__dirname, 'src/common'),
     },
   },
 };

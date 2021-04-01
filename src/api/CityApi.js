@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 function CityApi(skipNum, selectCountry) {
-  console.log('skipNum', skipNum);
   let skip = skipNum ? `&$skip=${skipNum}` : '';
 
   return axios
