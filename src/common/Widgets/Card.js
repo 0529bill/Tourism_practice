@@ -1,4 +1,5 @@
 import { Card as BootstrapCard, Container, Row, Col } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import { memo } from 'react';
 
 function Card({ data, id }) {
@@ -25,5 +26,10 @@ function Card({ data, id }) {
     </>
   );
 }
+
+Card.propTypes = {
+  data: PropTypes.object,
+  id: PropTypes.number,
+};
 
 export default memo(Card);
