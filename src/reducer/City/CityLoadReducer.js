@@ -1,6 +1,4 @@
 export default function CityLoadReducer(state, action) {
-  console.log('CItyReducerloadState', state);
-  console.log('CityReducerloadAction', action);
   switch (action.type) {
     case 'LOAD_REQUEST':
       return { ...state, load: state.load + 30 };

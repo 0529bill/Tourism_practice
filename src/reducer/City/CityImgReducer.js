@@ -1,6 +1,4 @@
 export default function CityImgReducer(state, action) {
-  console.log('CityReducerstate', state);
-  console.log('CityReduceraction', action);
   switch (action.type) {
     case 'FETCH_DATA':
       return { ...state, fetching: action.fetching };

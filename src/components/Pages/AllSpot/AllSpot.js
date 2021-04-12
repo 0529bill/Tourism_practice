@@ -20,16 +20,11 @@ function AllSpot() {
     fetching: true,
   });
 
-  console.log('loadState', loadState);
-  console.log('imgState', imgState);
-  console.log('allspot', AllSpotApi);
-
   let bottomBoundaryRef = useRef(null);
   let a = useCallback(
     (node) => {
       return new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          console.log('entry', entry);
           if (entry.intersectionRatio > 0.1 && entry.isIntersecting) {
             loadDispatch({ type: 'LOAD_REQUEST' });
           }
@@ -40,13 +35,11 @@ function AllSpot() {
   );
   /* Hooks */
   useEffect(() => {
-    console.log('setState');
     setInitState(true);
     a(bottomBoundaryRef.current);
   }, []);
 
   useEffect(() => {
-    console.log(bottomBoundaryRef.current);
     if (!bottomBoundaryRef.current && initState) {
       return;
     }

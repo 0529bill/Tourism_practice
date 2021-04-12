@@ -5,7 +5,8 @@ export default function useFetchCityApi(
   loadState,
   imgDispatch,
   status,
-  selectCountry
+  selectCountry,
+  state
 ) {
   useEffect(() => {
     if (status === 'city') {
@@ -17,19 +18,21 @@ export default function useFetchCityApi(
     async function fetchData() {
       imgDispatch({ type: 'FETCH_DATA', fetching: true });
 
+      window.localStorage.setItem('isFetching', true);
+      let d = window.localStorage.getItem('isFetching');
+
       let data = await Apis(
         loadState.load === 0 ? 0 : loadState.load - 30,
         selectCountry
       );
 
       if (data === 'error') {
-        console.log('error fetching data');
         return;
       }
-
       imgDispatch({ type: 'STACK_IMAGE', data });
 
       imgDispatch({ type: 'FETCH_DATA', fetching: false });
+      window.localStorage.setItem('isFetching', false);
     }
     fetchData();
   }, [loadState.load]);

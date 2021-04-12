@@ -53,7 +53,6 @@ function City() {
     (node) => {
       return new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          console.log('entry', entry);
           if (entry.intersectionRatio > 0.1) {
             return loadDispatch({ type: 'LOAD_REQUEST' });
           }
@@ -64,8 +63,14 @@ function City() {
   );
 
   /* Hooks */
-  console.log('CityApi', CityApi);
-  useFetchData(CityApi, loadState, imgDispatch, 'city', selectCountry);
+  useFetchData(
+    CityApi,
+    loadState,
+    imgDispatch,
+    'city',
+    selectCountry,
+    imgState
+  );
   useEffect(() => {
     if (initState && bottomBoundaryRef.current) {
       return;
